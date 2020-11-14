@@ -31,9 +31,9 @@
   ;;[com.cognitect/transit-cljs "0.8.264"]]
 
   :plugins
-  [[lein-pprint "1.3.2"]
-   [lein-ancient "0.6.15"]
-   ;[com.cemerick/austin "0.1.6"]
+  [[lein-pprint "1.3.2"] ;; pprinting project map
+   [lein-ancient "0.6.15"]  ;; A Leiningen plugin to check your project for outdated dependencies and plugins.
+   ;[com.cemerick/austin "0.1.6"] ;; cljs REPL
    [lein-cljsbuild "1.1.8"]]
 
 
