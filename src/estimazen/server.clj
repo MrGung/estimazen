@@ -15,10 +15,8 @@
     [taoensso.sente :as sente]
 
     [org.httpkit.server :as http-kit]
-    [taoensso.sente.server-adapters.http-kit :refer (get-sch-adapter)]
+    [taoensso.sente.server-adapters.http-kit :refer (get-sch-adapter)]))
 
-    ;; Optional, for Transit encoding:
-    [taoensso.sente.packers.transit :as sente-transit]))
 
 ;; (timbre/set-level! :trace) ; Uncomment for more logging
 (reset! sente/debug-mode?_ true)                            ; Uncomment for extra debug info

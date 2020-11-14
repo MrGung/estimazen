@@ -3,17 +3,16 @@
   {:author "Peter Taoussanis (@ptaoussanis)"}
 
   (:require
-   [clojure.string  :as str]
-   [cljs.core.async :as async  :refer (<! >! put! chan)]
-   [taoensso.encore :as encore :refer-macros (have have?)]
-   [taoensso.timbre :as timbre :refer-macros (tracef debugf infof warnf errorf)]
-   [taoensso.sente  :as sente  :refer (cb-success?)]
+    [clojure.string :as str]
+    [cljs.core.async :as async :refer (<! >! put! chan)]
+    [taoensso.encore :as encore :refer-macros (have have?)]
+    [taoensso.timbre :as timbre :refer-macros (tracef debugf infof warnf errorf)]
+    [taoensso.sente :as sente :refer (cb-success?)])
 
-   ;; Optional, for Transit encoding:
-   [taoensso.sente.packers.transit :as sente-transit])
+
 
   (:require-macros
-   [cljs.core.async.macros :as asyncm :refer (go go-loop)]))
+    [cljs.core.async.macros :as asyncm :refer (go go-loop)]))
 
 ;; (timbre/set-level! :trace) ; Uncomment for more logging
 
@@ -43,26 +42,26 @@
       _ (->output! "Randomly selected chsk type: %s" rand-chsk-type)
 
       ;; Serializtion format, must use same val for client + server:
-      packer :edn ; Default packer, a good choice in most cases
+      packer :edn                                           ; Default packer, a good choice in most cases
 
       {:keys [chsk ch-recv send-fn state]}
       (sente/make-channel-socket-client!
-        "/chsk" ; Must match server Ring routing URL
+        "/chsk"                                             ; Must match server Ring routing URL
         ?csrf-token
-        {:type   rand-chsk-type
+        {:type rand-chsk-type
          :packer packer})]
 
-  (def chsk       chsk)
-  (def ch-chsk    ch-recv) ; ChannelSocket's receive channel
-  (def chsk-send! send-fn) ; ChannelSocket's send API fn
-  (def chsk-state state))   ; Watchable, read-only atom
+  (def chsk chsk)
+  (def ch-chsk ch-recv)                                     ; ChannelSocket's receive channel
+  (def chsk-send! send-fn)                                  ; ChannelSocket's send API fn
+  (def chsk-state state))                                   ; Watchable, read-only atom
 
 
 ;;;; Sente event handlers
 
 (defmulti -event-msg-handler
   "Multimethod to handle Sente `event-msg`s"
-  :id) ; Dispatch on event-id
+  :id)                                                      ; Dispatch on event-id
 
 
 (defn event-msg-handler
@@ -71,7 +70,7 @@
   (-event-msg-handler ev-msg))
 
 (defmethod -event-msg-handler
-  :default ; Default/fallback case (no other matching handler)
+  :default                                                  ; Default/fallback case (no other matching handler)
   [{:as ev-msg :keys [event]}]
   (->output! "Unhandled event: %s" event))
 
@@ -80,7 +79,7 @@
   (let [[old-state-map new-state-map] (have vector? ?data)]
     (if (:first-open? new-state-map)
       (->output! "Channel socket successfully established!: %s" new-state-map)
-      (->output! "Channel socket state change: %s"              new-state-map))))
+      (->output! "Channel socket state change: %s" new-state-map))))
 
 (defmethod -event-msg-handler :chsk/recv
   [{:as ev-msg :keys [?data]}]
@@ -96,7 +95,7 @@
 ;;;; Sente event router (our `event-msg-handler` loop)
 
 (defonce router_ (atom nil))
-(defn  stop-router! [] (when-let [stop-f @router_] (stop-f)))
+(defn stop-router! [] (when-let [stop-f @router_] (stop-f)))
 (defn start-router! []
   (stop-router!)
   (reset! router_
@@ -138,15 +137,15 @@
 
 (when-let [target-el (.getElementById js/document "btn5")]
   (.addEventListener target-el "click"
-                     (fn [ev]
-                       (->output! "Disconnecting")
-                       (sente/chsk-disconnect! chsk))))
+    (fn [ev]
+      (->output! "Disconnecting")
+      (sente/chsk-disconnect! chsk))))
 
 (when-let [target-el (.getElementById js/document "btn6")]
   (.addEventListener target-el "click"
-                     (fn [ev]
-                       (->output! "Reconnecting")
-                       (sente/chsk-reconnect! chsk))))
+    (fn [ev]
+      (->output! "Reconnecting")
+      (sente/chsk-reconnect! chsk))))
 
 (when-let [target-el (.getElementById js/document "btn-login")]
   (.addEventListener target-el "click"
@@ -165,11 +164,11 @@
             (sente/ajax-lite "/login"
               {:method :post
                :headers {:X-CSRF-Token (:csrf-token @chsk-state)}
-               :params  {:user-id (str user-id)}}
+               :params {:user-id (str user-id)}}
 
               (fn [ajax-resp]
                 (->output! "Ajax login response: %s" ajax-resp)
-                (let [login-successful? true] ; Your logic here
+                (let [login-successful? true]               ; Your logic here
 
                   (if-not login-successful?
                     (->output! "Login failed")

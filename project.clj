@@ -25,11 +25,6 @@
    [compojure "1.6.2"]                                      ; Or routing lib of your choice
    [hiccup "1.0.5"]]                                        ; Optional, just for HTML
 
-  ;;; Transit deps optional; may be used to aid perf. of larger data payloads
-  ;;; (see reference example for details):
-  ;;[com.cognitect/transit-clj  "1.0.324"]
-  ;;[com.cognitect/transit-cljs "0.8.264"]]
-
   :plugins
   [[lein-pprint "1.3.2"] ;; pprinting project map
    [lein-ancient "0.6.15"]  ;; A Leiningen plugin to check your project for outdated dependencies and plugins.
