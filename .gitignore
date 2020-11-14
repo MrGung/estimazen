@@ -1,0 +1,12 @@
+.idea/workspace.xml
+.idea/usage.statistics.xml
+.idea/tasks.xml
+.idea/self
+/.idea/libraries/*
+/target/*
+/resources/public/main.js
+/figwheel_server.log
+/resources/public/out/*
+/.nrepl-port
+/resources/public/js/out/*
+/debug.log
