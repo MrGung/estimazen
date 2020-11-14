@@ -1,4 +1,4 @@
-(ns example.client
+(ns estimazen.client
   "Official Sente reference example: client"
   {:author "Peter Taoussanis (@ptaoussanis)"}
 

@@ -1,4 +1,4 @@
-(ns estamizen.server
+(ns estimazen.server
   "Official Sente reference example: server"
   {:author "Peter Taoussanis (@ptaoussanis)"}
 
