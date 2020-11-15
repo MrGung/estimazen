@@ -104,6 +104,16 @@
 
 ;;;; UI events
 
+(when-let [target-els (.getElementsByClassName js/document "est-btn")]
+  (doseq [target-el target-els]
+    (->output! (str "Registered" target-el "-" (.-value target-el)))
+    (.addEventListener target-el "click"
+      (fn [ev]
+        (->output! "est-Button was clicked (won't receive any reply from server)")
+        (chsk-send! [:estimazen/est-button {:btn-value (.-value target-el) :had-a-callback? "nope"}])))))
+
+
+
 (when-let [target-el (.getElementById js/document "btn1")]
   (.addEventListener target-el "click"
     (fn [ev]
