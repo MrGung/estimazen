@@ -7,7 +7,8 @@
     [cljs.core.async :as async :refer (<! >! put! chan)]
     [taoensso.encore :as encore :refer-macros (have have?)]
     [taoensso.timbre :as timbre :refer-macros (tracef debugf infof warnf errorf)]
-    [taoensso.sente :as sente :refer (cb-success?)])
+    [taoensso.sente :as sente :refer (cb-success?)]
+    [ring.middleware.anti-forgery :as af])
 
 
 
@@ -29,12 +30,21 @@
 
 ;;;; Define our Sente channel socket (chsk) client
 
+(if-let [el (.getElementById js/document "sente-csrf-token")]
+  (let [csrf-token (.getAttribute el "data-csrf-token")]
+    (when-not csrf-token
+      (let [csrf-token (force af/*anti-forgery-token*)]
+        (->output! "Retrieved csrf-token: %s" csrf-token)
+        (.setAttribute el "data-csrf-token" csrf-token)))))
+
 (def ?csrf-token
-  (when-let [el (.getElementById js/document "sente-csrf-token")]
+  (if-let [el (.getElementById js/document "sente-csrf-token")]
     (.getAttribute el "data-csrf-token")))
 
+
+
 (if ?csrf-token
-  (->output! "CSRF token detected in HTML, great!")
+  (->output! "CSRF token detected in HTML, great! %s" ?csrf-token)
   (->output! "CSRF token NOT detected in HTML, default Sente config will reject requests"))
 
 (let [;; For this example, select a random protocol:

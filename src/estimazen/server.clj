@@ -4,7 +4,7 @@
 
   (:require
     [clojure.string :as str]
-    [ring.middleware.defaults]
+    [ring.middleware.defaults :as defaults]
     [ring.middleware.anti-forgery :as anti-forgery]
     [compojure.core :as comp :refer (defroutes GET POST)]
     [compojure.route :as route]
@@ -114,8 +114,8 @@
 
   You're also STRONGLY recommended to use `ring.middleware.anti-forgery`
   or something similar."
-  (ring.middleware.defaults/wrap-defaults
-    ring-routes ring.middleware.defaults/site-defaults))
+  (-> #'ring-routes
+    (defaults/wrap-defaults (assoc-in defaults/site-defaults [:security :anti-forgery] false)))
 
 ;;;; Some server>user async push examples
 
