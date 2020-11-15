@@ -1,9 +1,5 @@
 (ns estimazen.server
-  "Official Sente reference example: server"
-  {:author "Peter Taoussanis (@ptaoussanis)"}
-
   (:require
-    [clojure.string :as str]
     [ring.middleware.defaults :as defaults]
     [ring.middleware.anti-forgery :as anti-forgery]
     [compojure.core :as comp :refer (defroutes GET POST)]
