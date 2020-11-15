@@ -30,7 +30,7 @@
    [lein-ancient "0.6.15"]                                  ;; A Leiningen plugin to check your project for outdated dependencies and plugins.
    ;[com.cemerick/austin "0.1.6"] ;; cljs REPL
    [lein-cljsbuild "1.1.8"]                                 ;; compile ClojureScript into Javascript whenever modified
-   [lein-figwheel "0.5.0-6"]]
+   [lein-figwheel "0.5.18"]]
 
 
   :profiles
@@ -41,7 +41,7 @@
                        :figwheel {}
                        :compiler {:main estimazen.client
                                   :output-to "resources/public/main.js"
-                                  :optimizations :whitespace
+                                  :optimizations :none
                                   :pretty-print true
                                   :source-map-timestamp true}}]}}
    :uberjar {:hooks [leiningen.cljsbuild]
