@@ -21,6 +21,7 @@
 
    [ring "1.8.1"]
    [ring/ring-defaults "0.3.2"]
+   [ring-cors "0.1.7"]
 
    [compojure "1.6.2"]                                      ; Or routing lib of your choice
    [hiccup "1.0.5"]]                                        ; Optional, just for HTML

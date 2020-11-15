@@ -8,6 +8,7 @@
     [ring.middleware.anti-forgery :as anti-forgery]
     [compojure.core :as comp :refer (defroutes GET POST)]
     [compojure.route :as route]
+    [ring.middleware.cors :as cors]
     [clojure.core.async :as async :refer (<! <!! >! >!! put! chan go go-loop)]
     [taoensso.encore :as encore :refer (have have?)]
     [taoensso.timbre :as timbre :refer (tracef debugf infof warnf errorf)]
@@ -74,7 +75,11 @@
   You're also STRONGLY recommended to use `ring.middleware.anti-forgery`
   or something similar."
   (-> #'ring-routes
-    (defaults/wrap-defaults (assoc-in defaults/site-defaults [:security :anti-forgery] false)))
+    (defaults/wrap-defaults (assoc-in defaults/site-defaults [:security :anti-forgery] false))
+    (cors/wrap-cors :access-control-allow-origin [#".*"]
+      :access-control-allow-methods [:get :put :post :delete]
+      :access-control-allow-credentials ["true"])))
+
 
 ;;;; Some server>user async push examples
 
