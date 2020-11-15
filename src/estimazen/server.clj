@@ -8,6 +8,7 @@
     [ring.middleware.anti-forgery :as anti-forgery]
     [compojure.core :as comp :refer (defroutes GET POST)]
     [compojure.route :as route]
+    [ring.util.response :as resp]
     [hiccup.core :as hiccup]
     [clojure.core.async :as async :refer (<! <!! >! >!! put! chan go go-loop)]
     [taoensso.encore :as encore :refer (have have?)]
@@ -97,7 +98,10 @@
     {:status 200 :session (assoc session :uid user-id)}))
 
 (defroutes ring-routes
-  (GET "/" ring-req (landing-pg-handler ring-req))
+  (GET "/" [] (resp/content-type
+                (resp/resource-response "public/index.html")
+                "text/html"))
+  (GET "/e" ring-req (landing-pg-handler ring-req))
   (GET "/chsk" ring-req (ring-ajax-get-or-ws-handshake ring-req))
   (POST "/chsk" ring-req (ring-ajax-post ring-req))
   (POST "/login" ring-req (login-handler ring-req))

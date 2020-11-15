@@ -1,0 +1,26 @@
+body, html {
+  height: 90%;
+}
+
+.bg {
+  background-image: url('/images/JapanZenGarden.jpg');
+  height: 100%;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: 2px solid black;
+}
+
+.est-btn {border-radius: 8px}
+
+#est-btn-ready {border-radius: 4px}
+
+
+
+.est-btn, #est-btn-ready {
+  transition-duration: 0.4s;
+}
+.est-btn:hover, #est-btn-ready:hover {
+  background-color: #777;
+}
