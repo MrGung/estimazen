@@ -26,20 +26,32 @@
    [hiccup "1.0.5"]]                                        ; Optional, just for HTML
 
   :plugins
-  [[lein-pprint "1.3.2"] ;; pprinting project map
-   [lein-ancient "0.6.15"]  ;; A Leiningen plugin to check your project for outdated dependencies and plugins.
+  [[lein-pprint "1.3.2"]                                    ;; pprinting project map
+   [lein-ancient "0.6.15"]                                  ;; A Leiningen plugin to check your project for outdated dependencies and plugins.
    ;[com.cemerick/austin "0.1.6"] ;; cljs REPL
-   [lein-cljsbuild "1.1.8"]]
+   [lein-cljsbuild "1.1.8"]                                 ;; compile ClojureScript into Javascript whenever modified
+   [lein-figwheel "0.5.0-6"]]
 
 
-  :cljsbuild
-  {:builds
-   [{:id :cljs-client
-     :source-paths ["src"]
-     :compiler {:output-to "resources/public/main.js"
-                :optimizations :whitespace #_:advanced
-                :pretty-print true}}]}
-
+  :profiles
+  {:dev {:env {:dev? "true"}
+         :cljsbuild {:builds
+                     [{:id "dev"
+                       :source-paths ["src" "dev"]
+                       :figwheel {}
+                       :compiler {:main estimazen.client
+                                  :output-to "resources/public/main.js"
+                                  :optimizations :whitespace
+                                  :pretty-print true
+                                  :source-map-timestamp true}}]}}
+   :uberjar {:hooks [leiningen.cljsbuild]
+             :aot :all
+             :cljsbuild {:builds
+                         [{:id "min"
+                           :source-paths ["src" "prod"]
+                           :compiler {:main estimazen.client
+                                      :optimizations :advanced
+                                      :pretty-print false}}]}}}
   :main estimazen.server
 
   :clean-targets ^{:protect false} ["resources/public/main.js"]
@@ -49,6 +61,8 @@
   :aliases
   {"start-repl" ["do" "clean," "cljsbuild" "once," "repl" ":headless"]
    "start" ["do" "clean," "cljsbuild" "once," "run"]}
+
+  :figwheel {:css-dirs ["resources/public/css"]}
 
   :repositories
   {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"})
