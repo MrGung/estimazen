@@ -47,19 +47,14 @@
   (->output! "CSRF token detected in HTML, great! %s" ?csrf-token)
   (->output! "CSRF token NOT detected in HTML, default Sente config will reject requests"))
 
-(let [;; For this example, select a random protocol:
-      rand-chsk-type (if (>= (rand) 0.5) :ajax :auto)
-      _ (->output! "Randomly selected chsk type: %s" rand-chsk-type)
-
-      ;; Serializtion format, must use same val for client + server:
+(let [;; Serializtion format, must use same val for client + server:
       packer :edn                                           ; Default packer, a good choice in most cases
 
-      {:keys [chsk ch-recv send-fn state]}
-      (sente/make-channel-socket-client!
-        "/chsk"                                             ; Must match server Ring routing URL
-        ?csrf-token
-        {:type rand-chsk-type
-         :packer packer})]
+      {:keys [chsk ch-recv send-fn state]} (sente/make-channel-socket-client!
+                                             "/chsk"        ; Must match server Ring routing URL
+                                             ?csrf-token
+                                             {:type :auto
+                                              :packer packer})]
 
   (def chsk chsk)
   (def ch-chsk ch-recv)                                     ; ChannelSocket's receive channel
