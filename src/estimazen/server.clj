@@ -8,15 +8,13 @@
     [ring.middleware.anti-forgery :as anti-forgery]
     [compojure.core :as comp :refer (defroutes GET POST)]
     [compojure.route :as route]
-    [ring.util.response :as resp]
-    [hiccup.core :as hiccup]
     [clojure.core.async :as async :refer (<! <!! >! >!! put! chan go go-loop)]
     [taoensso.encore :as encore :refer (have have?)]
     [taoensso.timbre :as timbre :refer (tracef debugf infof warnf errorf)]
     [taoensso.sente :as sente]
-
     [org.httpkit.server :as http-kit]
-    [taoensso.sente.server-adapters.http-kit :refer (get-sch-adapter)]))
+    [taoensso.sente.server-adapters.http-kit :refer (get-sch-adapter)]
+    [estimazen.views :as views]))
 
 
 ;; (timbre/set-level! :trace) ; Uncomment for more logging
@@ -48,43 +46,6 @@
 
 ;;;; Ring handlers
 
-(defn landing-pg-handler [ring-req]
-  (hiccup/html
-    [:h1 "Sente reference example"]
-    (let [csrf-token
-          ;; (:anti-forgery-token ring-req) ; Also an option
-          (force anti-forgery/*anti-forgery-token*)]
-
-      [:div#sente-csrf-token {:data-csrf-token csrf-token}])
-    [:p "An Ajax/WebSocket" [:strong " (random choice!)"] " has been configured for this example"]
-    [:hr]
-    [:p [:strong "Step 1: "] " try hitting the buttons:"]
-    [:p
-     [:button#btn1 {:type "button"} "chsk-send! (w/o reply)"]
-     [:button#btn2 {:type "button"} "chsk-send! (with reply)"]]
-    [:p
-     [:button#btn3 {:type "button"} "Test rapid server>user async pushes"]
-     [:button#btn4 {:type "button"} "Toggle server>user async broadcast push loop"]]
-    [:p
-     [:button#btn5 {:type "button"} "Disconnect"]
-     [:button#btn6 {:type "button"} "Reconnect"]]
-    ;;
-    [:p [:strong "Step 2: "] " observe std-out (for server output) and below (for client output):"]
-    [:textarea#output {:style "width: 100%; height: 200px;"}]
-    ;;
-    [:hr]
-    [:h2 "Step 3: try login with a user-id"]
-    [:p "The server can use this id to send events to *you* specifically."]
-    [:p
-     [:input#input-login {:type :text :placeholder "User-id"}]
-     [:button#btn-login {:type "button"} "Secure login!"]]
-    ;;
-    [:hr]
-    [:h2 "Step 4: want to re-randomize Ajax/WebSocket connection type?"]
-    [:p "Hit your browser's reload/refresh button"]
-    [:script {:src "main.js"}]))                            ; Include our cljs target
-
-
 (defn login-handler
   "Here's where you'll add your server-side login/auth procedure (Friend, etc.).
   In our simplified example we'll just always successfully authenticate the user
@@ -96,10 +57,8 @@
     {:status 200 :session (assoc session :uid user-id)}))
 
 (defroutes ring-routes
-  (GET "/" [] (resp/content-type
-                (resp/resource-response "public/index.html")
-                "text/html"))
-  (GET "/e" ring-req (landing-pg-handler ring-req))
+  (GET "/" ring-req (views/estimazen-landing-pg-handler ring-req))
+  (GET "/e" ring-req (views/landing-pg-handler ring-req))
   (GET "/chsk" ring-req (ring-ajax-get-or-ws-handshake ring-req))
   (POST "/chsk" ring-req (ring-ajax-post ring-req))
   (POST "/login" ring-req (login-handler ring-req))
