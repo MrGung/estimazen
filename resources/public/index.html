@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <title>estimazen - minimalist agile distributed estimation</title>
     <link href="css/style.css" rel="stylesheet" type="text/css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 <div class="bg">
     <h1>estimazen</h1>
 
     <pre>
-[:h1 "estimazen"]
 (let [csrf-token
 ;; (:anti-forgery-token ring-req) ; Also an option
 (force anti-forgery/*anti-forgery-token*)]
@@ -39,7 +38,11 @@
 [:input#input-login {:type :text :placeholder "User-id"}]
 [:button#btn-login {:type "button"} "Secure login!"]]
 </pre>
-    <script src="main.js"/>
+
+    <textarea id="output" style="width: 100%; height: 200px;"></textarea>
+
+
+    <script src="main.js"></script>
 </div>
 </body>
 </html>
