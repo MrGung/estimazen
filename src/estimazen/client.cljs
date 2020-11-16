@@ -104,7 +104,7 @@
     (->output! (str "Registered" target-el "-" (.-value target-el)))
     (.addEventListener target-el "click"
       (fn [ev]
-        (->output! "est-Button was clicked (won't receive any reply from server)")
+        (->output! "est-Button was clicked: %s" (.-value target-el))
         (chsk-send! [:estimazen/est-button {:btn-value (.-value target-el) :had-a-callback? "nope"}])))))
 
 
