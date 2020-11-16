@@ -101,11 +101,11 @@
 
 (when-let [target-els (.getElementsByClassName js/document "est-btn")]
   (doseq [target-el target-els]
-    (->output! (str "Registered" target-el "-" (.-value target-el)))
+    (->output! "Registered Btn %s" (.-textContent target-el))
     (.addEventListener target-el "click"
       (fn [ev]
-        (->output! "est-Button was clicked: %s" (.-value target-el))
-        (chsk-send! [:estimazen/est-button {:btn-value (.-value target-el) :had-a-callback? "nope"}])))))
+        (->output! "est-Button was clicked: %s" (.-textContent target-el))
+        (chsk-send! [:estimazen/est-button {:btn-value (.-textContent target-el) :had-a-callback? "nope"}])))))
 
 
 ;;;; Init stuff
