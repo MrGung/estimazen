@@ -55,7 +55,6 @@
 
 (defroutes ring-routes
   (GET "/" ring-req (views/estimazen-landing-pg-handler ring-req))
-  (GET "/e" ring-req (views/landing-pg-handler ring-req))
   (GET "/chsk" ring-req (ring-ajax-get-or-ws-handshake ring-req))
   (POST "/chsk" ring-req (ring-ajax-post ring-req))
   (POST "/login" ring-req (login-handler ring-req))
@@ -78,16 +77,6 @@
 
 
 ;;;; Some server>user async push examples
-
-(defn test-fast-server>user-pushes
-  "Quickly pushes 100 events to all connected users. Note that this'll be
-  fast+reliable even over Ajax!"
-  []
-  (doseq [uid (:any @connected-uids)]
-    (doseq [i (range 100)]
-      (chsk-send! uid [:fast-push/is-fast (str "hello " i "!!")]))))
-
-(comment (test-fast-server>user-pushes))
 
 (defonce broadcast-enabled?_ (atom true))
 
@@ -123,7 +112,6 @@
   "Wraps `-event-msg-handler` with logging, error catching, etc."
   [{:as ev-msg :keys [id ?data event]}]
   (-event-msg-handler ev-msg))                              ; Handle event-msgs on a single thread
-;; (future (-event-msg-handler ev-msg)) ; Handle event-msgs on a thread pool
 
 
 (defmethod -event-msg-handler
@@ -134,14 +122,6 @@
     (debugf "Unhandled event: %s" event)
     (when ?reply-fn
       (?reply-fn {:umatched-event-as-echoed-from-server event}))))
-
-(defmethod -event-msg-handler :example/test-rapid-push
-  [ev-msg] (test-fast-server>user-pushes))
-
-(defmethod -event-msg-handler :example/toggle-broadcast
-  [{:as ev-msg :keys [?reply-fn]}]
-  (let [loop-enabled? (swap! broadcast-enabled?_ not)]
-    (?reply-fn loop-enabled?)))
 
 (defmethod -event-msg-handler :estimazen/est-button
   [{{:keys [btn-value]} :event}]
