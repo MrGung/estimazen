@@ -69,11 +69,13 @@
 
   You're also STRONGLY recommended to use `ring.middleware.anti-forgery`
   or something similar."
-  (-> #'ring-routes
-    (defaults/wrap-defaults (assoc-in defaults/site-defaults [:security :anti-forgery] false))
-    (cors/wrap-cors :access-control-allow-origin [#".*"]
-      :access-control-allow-methods [:get :put :post :delete]
-      :access-control-allow-credentials ["true"])))
+  #_(-> #'ring-routes
+      (defaults/wrap-defaults (assoc-in defaults/site-defaults [:security :anti-forgery] false))
+      (cors/wrap-cors :access-control-allow-origin [#".*"]
+        :access-control-allow-methods [:get :put :post :delete]
+        :access-control-allow-credentials ["true"]))
+  (ring.middleware.defaults/wrap-defaults
+    ring-routes ring.middleware.defaults/site-defaults))
 
 
 ;;;; Some server>user async push examples
