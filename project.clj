@@ -24,7 +24,7 @@
    [ring-cors "0.1.7"]
 
    [compojure "1.6.2"]                                      ; Or routing lib of your choice
-   [hiccup "1.0.5"]                                        ; Optional, just for HTML
+   [hiccup "1.0.5"]                                         ; Optional, just for HTML
 
    [com.bhauman/figwheel-main "0.2.12"]]
 
@@ -32,29 +32,16 @@
   [[lein-pprint "1.3.2"]                                    ;; pprinting project map
    [lein-ancient "0.6.15"]                                  ;; A Leiningen plugin to check your project for outdated dependencies and plugins.
    ;[com.cemerick/austin "0.1.6"] ;; cljs REPL
-   [lein-cljsbuild "1.1.8"]]                                 ;; compile ClojureScript into Javascript whenever modified
+   [lein-cljsbuild "1.1.8"]]                                ;; compile ClojureScript into Javascript whenever modified
 
 
 
-  :profiles
-  {:dev {:env {:dev? "true"}
-         :cljsbuild {:builds
-                     [{:id "dev"
-                       :source-paths ["src" "dev"]
-                       :figwheel {}
-                       :compiler {:main estimazen.client
-                                  :output-to "resources/public/main.js"
-                                  :optimizations :none
-                                  :pretty-print true
-                                  :source-map-timestamp true}}]}}
-   :uberjar {:hooks [leiningen.cljsbuild]
-             :aot :all
-             :cljsbuild {:builds
-                         [{:id "min"
-                           :source-paths ["src" "prod"]
-                           :compiler {:main estimazen.client
-                                      :optimizations :advanced
-                                      :pretty-print false}}]}}}
+  :cljsbuild {:builds
+              [{:id :cljs-client
+                :source-paths ["src"]
+                :compiler {:output-to "resources/public/main.js"
+                           :optimizations :whitespace #_:advanced
+                           :pretty-print true}}]}
   :main estimazen.server
 
   :clean-targets ^{:protect false} ["resources/public/main.js"]
