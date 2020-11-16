@@ -1,6 +1,8 @@
 (ns estimazen.views
   (:require [hiccup.core :as hiccup]
-            [hiccup.page :as page]))
+            [hiccup.page :as page]
+            [ring.middleware.anti-forgery :as anti-forgery]))
+
 
 
 
@@ -15,7 +17,7 @@
      [:body
       [:div {:class "bg"}
        [:h1 "estimazen"]
-       (let [csrf-token (:anti-forgery-token ring-req)]
+       (let [csrf-token #_(:anti-forgery-token ring-req) (force anti-forgery/*anti-forgery-token*)]
          [:div#sente-csrf-token {:data-csrf-token csrf-token}])
        [:div {:id "sente-csrf-token", :data-csrf-token "csrf-token"}
         [:p
