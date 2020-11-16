@@ -24,14 +24,16 @@
    [ring-cors "0.1.7"]
 
    [compojure "1.6.2"]                                      ; Or routing lib of your choice
-   [hiccup "1.0.5"]]                                        ; Optional, just for HTML
+   [hiccup "1.0.5"]                                        ; Optional, just for HTML
+
+   [com.bhauman/figwheel-main "0.2.12"]]
 
   :plugins
   [[lein-pprint "1.3.2"]                                    ;; pprinting project map
    [lein-ancient "0.6.15"]                                  ;; A Leiningen plugin to check your project for outdated dependencies and plugins.
    ;[com.cemerick/austin "0.1.6"] ;; cljs REPL
-   [lein-cljsbuild "1.1.8"]                                 ;; compile ClojureScript into Javascript whenever modified
-   [lein-figwheel "0.5.18"]]
+   [lein-cljsbuild "1.1.8"]]                                 ;; compile ClojureScript into Javascript whenever modified
+
 
 
   :profiles
@@ -61,9 +63,12 @@
   ;; connect to with Cider+emacs or your IDE of choice:
   :aliases
   {"start-repl" ["do" "clean," "cljsbuild" "once," "repl" ":headless"]
-   "start" ["do" "clean," "cljsbuild" "once," "run"]}
+   "start" ["do" "clean," "cljsbuild" "once," "run"]
+   "fig" ["trampoline" "run" "-m" "figwheel.main"]
+   "build-dev" ["trampoline" "run" "-m" "figwheel.main" "-b" "dev" "-r"]}
 
-  :figwheel {:css-dirs ["resources/public/css"]}
+  ;;:figwheel {:css-dirs ["resources/public/css"]}
+  :resource-paths ["target" "resources"]
 
   :repositories
   {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"})
