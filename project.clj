@@ -39,10 +39,12 @@
               [{:id :cljs-client
                 :source-paths ["src"]
                 :compiler {:output-to "resources/public/main.js"
-                           :optimizations :none #_:whitespace #_:advanced
+                           :main estimazen.client
+                           :optimizations :whitespace #_:advanced
                            :pretty-print true}}]}
   :main estimazen.server
 
+  ;; files removed by `lein clean`
   :clean-targets ^{:protect false} ["resources/public/main.js"]
 
   ;; Call `lein start-repl` to get a (headless) development repl that you can
