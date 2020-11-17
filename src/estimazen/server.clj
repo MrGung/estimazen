@@ -80,7 +80,7 @@
 
 ;;;; Some server>user async push examples
 
-(defonce broadcast-enabled?_ (atom true))
+(defonce broadcast-enabled?_ (atom false))
 
 (defn start-example-broadcaster!
   "As an example of server>user async pushes, setup a loop to broadcast an
