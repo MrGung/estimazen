@@ -45,7 +45,6 @@
                                              ?csrf-token
                                              {:type :auto
                                               :packer packer})]
-
   (def chsk chsk)
   (def ch-chsk ch-recv)                                     ; ChannelSocket's receive channel
   (def chsk-send! send-fn)                                  ; ChannelSocket's send API fn

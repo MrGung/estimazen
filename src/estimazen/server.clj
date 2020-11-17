@@ -126,10 +126,8 @@
       (?reply-fn {:umatched-event-as-echoed-from-server event}))))
 
 (defmethod -event-msg-handler :estimazen/est-button
-  [{{:keys [btn-value]} :event}]
-  (debugf "Estimation: %s" btn-value))
-
-;; TODO Add your (defmethod -event-msg-handler <event-id> [ev-msg] <body>)s here...
+  [{[evt-id {:keys [btn-value]}] :event client-id :client-id :as all}]
+  (debugf "Estimation: %s from %s" btn-value client-id))
 
 ;;;; Sente event router (our `event-msg-handler` loop)
 
