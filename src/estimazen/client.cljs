@@ -82,10 +82,12 @@
 (defmethod -event-msg-handler :chsk/handshake
   [{:as ev-msg :keys [?data]}]
   (let [[?uid ?csrf-token ?handshake-data] ?data]
-    (->output! "Handshake: %s" ?data)))
+    (->output! "Handshake (uid, csrf-token, handshake-data): %s" ?data)))
 
 ;; TODO Add your (defmethod -event-msg-handler <event-id> [ev-msg] <body>)s here...
-
+(defmethod -event-msg-handler :estimazen/est-result
+  [{:as ev-msg :keys [estimations]}]
+  (->output! "Push event from server: %s" estimations))
 ;;;; Sente event router (our `event-msg-handler` loop)
 
 (defonce router_ (atom nil))

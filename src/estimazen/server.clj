@@ -23,7 +23,7 @@
       packer :edn                                           ; Default packer, a good choice in most cases
 
       chsk-server (sente/make-channel-socket-server!
-                    (get-sch-adapter) {:packer packer})
+                    (get-sch-adapter) {:packer packer :user-id-fn (fn [ring-req] (:client-id ring-req))})
 
       {:keys [ch-recv send-fn connected-uids
               ajax-post-fn ajax-get-or-ws-handshake-fn]} chsk-server]
@@ -124,9 +124,18 @@
     (debugf "Unhandled event: %s" event)
     (when ?reply-fn
       (?reply-fn {:umatched-event-as-echoed-from-server event}))))
-
+(defonce estimations (atom {}))
 (defmethod -event-msg-handler :estimazen/est-button
   [{[evt-id {:keys [btn-value]}] :event client-id :client-id :as all}]
+  (swap! estimations assoc client-id btn-value)
+  (let [current-estimations @estimations
+        current-connected-uids (:any @connected-uids)]
+    (when (== (count current-estimations) (count current-connected-uids))
+      (doseq [uid current-connected-uids]
+        (chsk-send! uid
+          [:estimazen/est-result
+           {:estimations current-estimations}]))
+      (reset! estimations {})))
   (debugf "Estimation: %s from %s" btn-value client-id))
 
 ;;;; Sente event router (our `event-msg-handler` loop)
