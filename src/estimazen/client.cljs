@@ -86,8 +86,16 @@
 
 ;; TODO Add your (defmethod -event-msg-handler <event-id> [ev-msg] <body>)s here...
 (defmethod -event-msg-handler :estimazen/est-result
-  [{:as ev-msg :keys [estimations]}]
-  (->output! "Push event from server: %s" estimations))
+  [{:as ev-msg :keys [estimations html]}]
+  (->output! "Push event from server: %s" estimations)
+  (when-let [results-el (.getElementById js/document "est-results")]
+    (->output! "Displaying results")
+    (set! (.-innerHTML results-el) html)))
+
+
+
+
+
 ;;;; Sente event router (our `event-msg-handler` loop)
 
 (defonce router_ (atom nil))

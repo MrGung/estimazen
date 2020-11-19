@@ -11,7 +11,8 @@
     [taoensso.sente :as sente]
     [org.httpkit.server :as http-kit]
     [taoensso.sente.server-adapters.http-kit :refer (get-sch-adapter)]
-    [estimazen.views :as views]))
+    [estimazen.views :as views]
+    [hiccup.core :as hiccup]))
 
 
 ;; (timbre/set-level! :trace) ; Uncomment for more logging
@@ -128,18 +129,23 @@
 
 
 (defonce estimations (atom {}))
+(comment
+  (do (clojure.pprint/pprint @estimations)
+      (clojure.pprint/pprint (:any @connected-uids))))
 (defmethod -event-msg-handler :estimazen/est-button
   [{[evt-id {:keys [btn-value]}] :event client-id :client-id :as all}]
   (swap! estimations assoc client-id btn-value)
   (let [current-estimations @estimations
         current-connected-uids (:any @connected-uids)]
-    (when (== (count current-estimations) (count current-connected-uids))
+    (debugf "Estimation: %s from %s" btn-value client-id)
+    (when (>= (count current-estimations) (count current-connected-uids))
+      (debugf "Starting Broadcast")
       (doseq [uid current-connected-uids]
         (chsk-send! uid
           [:estimazen/est-result
-           {:estimations current-estimations}]))
-      (reset! estimations {})))
-  (debugf "Estimation: %s from %s" btn-value client-id))
+           {:estimations current-estimations
+            :html (hiccup/html [:ul (for [est (sort (map second current-estimations))] [:li est])])}]))
+      (reset! estimations {}))))
 
 ;;;; Sente event router (our `event-msg-handler` loop)
 

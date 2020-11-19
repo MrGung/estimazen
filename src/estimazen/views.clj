@@ -1,7 +1,7 @@
 (ns estimazen.views
-  (:require [hiccup.core :as hiccup]
-            [hiccup.page :as page]
-            [ring.middleware.anti-forgery :as anti-forgery]))
+  (:require
+    [hiccup.page :as page]
+    [ring.middleware.anti-forgery :as anti-forgery]))
 
 
 
