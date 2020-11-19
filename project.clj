@@ -40,13 +40,13 @@
                 :source-paths ["src"]
                 :compiler {:output-to "resources/public/main.js"
                            :main estimazen.client
-                           :optimizations :none #_:whitespace #_:advanced
-                           :source-map true
+                           :optimizations :whitespace #_:advanced
+                           #_#_:source-map true
                            :pretty-print true}}]}
   :main estimazen.server
 
   ;; files removed by `lein clean`
-  :clean-targets ^{:protect false} ["resources/public/main.js"]
+  :clean-targets ^{:protect false} ["resources/public/main.js" "target"]
 
   ;; Call `lein start-repl` to get a (headless) development repl that you can
   ;; connect to with Cider+emacs or your IDE of choice:
