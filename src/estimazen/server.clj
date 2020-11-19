@@ -35,12 +35,6 @@
   (def connected-uids connected-uids))                      ; Watchable, read-only atom
 
 
-;; We can watch this atom for changes if we like
-(add-watch connected-uids :connected-uids
-  (fn [_ _ old new]
-    (when (not= old new)
-      (infof "Connected uids change: %s" new))))
-
 ;;;; Ring handlers
 
 (defn login-handler
@@ -124,6 +118,15 @@
     (debugf "Unhandled event: %s" event)
     (when ?reply-fn
       (?reply-fn {:umatched-event-as-echoed-from-server event}))))
+
+(defmethod -event-msg-handler
+  :chsk/uidport-close
+  [{:keys [event id ?data ring-req]}]
+  (let [session (:session ring-req)
+        uid (:uid session)]
+    (debugf "Client disconnected: %s %s %s" event id ?data)))
+
+
 (defonce estimations (atom {}))
 (defmethod -event-msg-handler :estimazen/est-button
   [{[evt-id {:keys [btn-value]}] :event client-id :client-id :as all}]
