@@ -40,7 +40,8 @@
                 :source-paths ["src"]
                 :compiler {:output-to "resources/public/main.js"
                            :main estimazen.client
-                           :optimizations :whitespace #_:advanced
+                           :optimizations :none #_:whitespace #_:advanced
+                           :source-map true
                            :pretty-print true}}]}
   :main estimazen.server
 
