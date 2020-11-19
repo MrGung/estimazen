@@ -24,35 +24,44 @@
    [ring-cors "0.1.7"]
 
    [compojure "1.6.2"]                                      ; Or routing lib of your choice
-   [hiccup "1.0.5"]]                                         ; Optional, just for HTML
+   [hiccup "1.0.5"]]                                        ; Optional, just for HTML
 
 
   :plugins
   [[lein-pprint "1.3.2"]                                    ;; pprinting project map
    [lein-ancient "0.6.15"]                                  ;; A Leiningen plugin to check your project for outdated dependencies and plugins.
    ;[com.cemerick/austin "0.1.6"] ;; cljs REPL
-   [lein-cljsbuild "1.1.8"]]                                ;; compile ClojureScript into Javascript whenever modified
+   [lein-cljsbuild "1.1.8"]                                 ;; compile ClojureScript into Javascript whenever modified
+   [lein-figwheel "0.5.20"]]
 
 
 
   :cljsbuild {:builds
               [{:id :cljs-client
                 :source-paths ["src"]
-                :compiler {:output-to "resources/public/main.js"
-                           :main estimazen.client
-                           :optimizations :whitespace #_:advanced
+                :figwheel true
+                :compiler {:main estimazen.client
+                           :asset-path "js/out"             ;https://clojurescript.org/reference/compiler-options#asset-path
+                           :output-to "resources/public/main.js"
+                           :output-dir "resources/public/js/out"
+                           :optimizations :none             ;:whitespace #_:advanced
+                           :source-map-timestamp true
                            #_#_:source-map true
                            :pretty-print true}}]}
   :main estimazen.server
 
   ;; files removed by `lein clean`
-  :clean-targets ^{:protect false} ["resources/public/main.js" "target"]
+  :clean-targets ^{:protect false} ["resources/public/main.js" "target" "resources/public/js/out"]
+
+
+  :source-paths ["src"]
+  :figwheel {:css-dirs ["resources/public/css"]}
 
   ;; Call `lein start-repl` to get a (headless) development repl that you can
   ;; connect to with Cider+emacs or your IDE of choice:
   :aliases
-  {"start-repl" ["do" "clean," "cljsbuild" "once," "repl" ":headless"]
-   "start" ["do" "clean," "cljsbuild" "once," "run"]}
+  {"start-repl" ["do" "clean," "repl" ":headless"]
+   "start" ["do" "clean," "run"]}
 
   :repositories
   {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"})
