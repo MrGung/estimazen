@@ -84,13 +84,14 @@
   (let [[?uid ?csrf-token ?handshake-data] ?data]
     (->output! "Handshake (uid, csrf-token, handshake-data): %s" ?data)))
 
-;; TODO Add your (defmethod -event-msg-handler <event-id> [ev-msg] <body>)s here...
 (defmethod -event-msg-handler :estimazen/est-result
   [{:keys [estimations html]}]
   (->output! "Estimations recieved from server: %s" estimations)
   (when-let [results-el (.getElementById js/document "est-results")]
-    (->output! "Displaying results")
-    (set! (.-innerHTML results-el) html)))
+    (->output! "Displaying results, adding\n%s" html)
+    (-> results-el
+      (.-innerHTML)
+      (set! html))))
 
 
 
