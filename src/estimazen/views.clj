@@ -17,6 +17,7 @@
      [:body
       [:div {:class "bg"}
        [:h1 "estimazen"]
+       [:div#est-results]
        (let [csrf-token #_(:anti-forgery-token ring-req) (force anti-forgery/*anti-forgery-token*)]
          [:div#sente-csrf-token {:data-csrf-token csrf-token}])
        [:p
