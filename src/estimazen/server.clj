@@ -129,13 +129,15 @@
 
 
 (defonce estimations (atom {}))
+
 (comment
   (do
     (println "current estimations")
     (clojure.pprint/pprint @estimations)
     (println "connected uids:")
     (clojure.pprint/pprint (:any @connected-uids)))
-  (reset))
+  (reset! connected-uids {:any #{} :ws #{} :ajax #{}}))
+
 (defmethod -event-msg-handler :estimazen/est-button
   [{[evt-id {:keys [btn-value]}] :event client-id :client-id :as all}]
   (swap! estimations assoc client-id btn-value)
@@ -145,6 +147,7 @@
     (when (>= (count current-estimations) (count current-connected-uids))
       (debugf "All clients voted - starting broadcast of results")
       (doseq [uid current-connected-uids]
+        (debugf "  ...sending to %s" uid)
         (chsk-send! uid
           [:estimazen/est-result
            {:estimations current-estimations
