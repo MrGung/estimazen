@@ -130,8 +130,12 @@
 
 (defonce estimations (atom {}))
 (comment
-  (do (clojure.pprint/pprint @estimations)
-      (clojure.pprint/pprint (:any @connected-uids))))
+  (do
+    (println "current estimations")
+    (clojure.pprint/pprint @estimations)
+    (println "connected uids:")
+    (clojure.pprint/pprint (:any @connected-uids)))
+  (reset))
 (defmethod -event-msg-handler :estimazen/est-button
   [{[evt-id {:keys [btn-value]}] :event client-id :client-id :as all}]
   (swap! estimations assoc client-id btn-value)
