@@ -1,8 +1,9 @@
 body, html {
   height: 90%;
+  font-family: "Segoe Script", sans-serif;
 }
 
-/*
+
 .bg {
   background-image: url('/images/JapanZenGarden.jpg');
   height: 100%;
@@ -11,18 +12,46 @@ body, html {
   background-repeat: no-repeat;
   background-size: cover;
   border: 2px solid black;
-}*/
+}
 
-.est-btn {border-radius: 8px}
+.bg {
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+h1 {
+  font-size: 3em;
+  margin-top: 1em
+}
+
+#buttons{
+  margin-left: 10%;
+  border:1px solid red
+}
+.est-btn {
+  border-radius: 8px;
+  font-family: "Segoe UI", sans-serif;
+  font-weight: bold;
+  background-color: #fff9;
+  padding:10px 15px;
+  font-size: 1.2em;
+}
 
 #est-btn-ready {border-radius: 4px}
 
 #est-results {
-display: block;
+    display: block;
     float: right;
-    width: 30%;
+    width: 10%;
+    min-width: 50px;
     height: 60px;
-    border: 1px solid black;}
+    border: 1px solid black;
+    padding: 1em;
+    border-radius: 4px;
+    margin-top:6%;
+    background-color: #fffb;
+}
+#est-results ul{padding:0;margin:0;padding-left: 1em}
 
 .est-btn, #est-btn-ready {
   transition-duration: 0.4s;
@@ -30,3 +59,5 @@ display: block;
 .est-btn:hover, #est-btn-ready:hover {
   background-color: #777;
 }
+
+#output {visibility:hidden}
