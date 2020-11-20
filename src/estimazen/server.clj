@@ -139,7 +139,7 @@
         current-connected-uids (:any @connected-uids)]
     (debugf "Estimation: %s from %s" btn-value client-id)
     (when (>= (count current-estimations) (count current-connected-uids))
-      (debugf "Starting Broadcast")
+      (debugf "All clients voted - starting broadcast of results")
       (doseq [uid current-connected-uids]
         (chsk-send! uid
           [:estimazen/est-result
