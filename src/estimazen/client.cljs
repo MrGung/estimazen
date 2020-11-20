@@ -75,16 +75,19 @@
       (->output! "Channel socket successfully established!: %s" new-state-map)
       (->output! "Channel socket state change: %s" new-state-map))))
 
-(defmethod -event-msg-handler :chsk/recv
-  [{:as ev-msg :keys [?data]}]
-  (->output! "Push event from server: %s" ?data))
-
 (defmethod -event-msg-handler :chsk/handshake
   [{:as ev-msg :keys [?data]}]
   (let [[?uid ?csrf-token ?handshake-data] ?data]
     (->output! "Handshake (uid, csrf-token, handshake-data): %s" ?data)))
 
-(defmethod -event-msg-handler :estimazen/est-result
+
+(defmulti push-msg-handler (fn [[id _]] id))
+
+(defmethod -event-msg-handler :chsk/recv
+  [{:as ev-msg :keys [?data]}]
+  (push-msg-handler ?data))
+
+(defmethod push-msg-handler :estimazen/est-result
   [{:keys [estimations html]}]
   (->output! "Estimations recieved from server: %s" estimations)
   (when-let [results-el (.getElementById js/document "est-results")]
@@ -92,7 +95,7 @@
     (-> results-el
       (.-innerHTML)
       (set! html))))
-
+;; (-> (.getElementById js/document "est-results") (.-innerHTML) (set! "hallo, welt"))
 
 
 
