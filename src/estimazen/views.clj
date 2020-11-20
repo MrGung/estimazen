@@ -20,9 +20,9 @@
        [:div#est-results]
        (let [csrf-token #_(:anti-forgery-token ring-req) (force anti-forgery/*anti-forgery-token*)]
          [:div#sente-csrf-token {:data-csrf-token csrf-token}])
-       [:p
-        [:input#input-login {:type :text :placeholder "User-id"}]
-        [:button#btn-login {:type "button"} "login!"]]
+       #_[:p
+          [:input#input-login {:type :text :placeholder "User-id"}]
+          [:button#btn-login {:type "button"} "login!"]]
        [:p
         (for [btn-id [1 2 3 5 8 13]]
           [:button {:id (str "est-btn" btn-id), :type "button", :class "est-btn"} btn-id])
