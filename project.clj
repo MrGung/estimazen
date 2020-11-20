@@ -61,6 +61,7 @@
   ;; connect to with Cider+emacs or your IDE of choice:
   :aliases
   {"start-repl" ["do" "clean," "repl" ":headless"]
+   "rr" ["repl" ":headless"]
    "start" ["do" "clean," "run"]}
 
   :repositories
