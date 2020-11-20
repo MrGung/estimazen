@@ -88,10 +88,10 @@
   (push-msg-handler ?data))
 
 (defmethod push-msg-handler :estimazen/est-result
-  [{:keys [estimations html]}]
+  [[id {:keys [estimations html]}]]
   (->output! "Estimations recieved from server: %s" estimations)
   (when-let [results-el (.getElementById js/document "est-results")]
-    (->output! "Displaying results, adding\n%s" html)
+    (->output! "Displaying results...")
     (-> results-el
       (.-innerHTML)
       (set! html))))
