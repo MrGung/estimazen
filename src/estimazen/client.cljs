@@ -102,7 +102,14 @@
 
 
 (comment
-  (sente/chsk-reconnect! chsk))
+  (sente/chsk-reconnect! chsk)
+
+  (in-ns 'estimazen.client)
+  (if-let [results-el (.getElementById js/document "est-results")]
+    (-> results-el
+      (.-style)
+      (.-display)
+      (set! "visible"))))
 
 
 ;;;; Sente event router (our `event-msg-handler` loop)
@@ -153,6 +160,12 @@
                     (do
                       (->output! "Login successful")
                       (sente/chsk-reconnect! chsk))))))))))))
+
+(when-let [target-el (.getElementById js/document "reconnect")]
+  (.addEventListener target-el "click"
+    (fn [ev]
+      (->output! "Reconnecting")
+      (sente/chsk-reconnect! chsk))))
 
 ;;;; Init stuff
 
