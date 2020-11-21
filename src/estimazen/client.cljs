@@ -93,11 +93,16 @@
   (when-let [results-el (.getElementById js/document "est-results")]
     (->output! "Displaying results...")
     (-> results-el
+      (.-style)
+      (.-display)
+      (set! "visible"))
+    (-> results-el
       (.-innerHTML)
       (set! html))))
-;; (-> (.getElementById js/document "est-results") (.-innerHTML) (set! "hallo, welt"))
 
 
+(comment
+  (sente/chsk-reconnect! chsk))
 
 
 ;;;; Sente event router (our `event-msg-handler` loop)

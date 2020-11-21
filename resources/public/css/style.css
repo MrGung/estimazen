@@ -40,7 +40,7 @@ h1 {
 #est-btn-ready {border-radius: 4px}
 
 #est-results {
-    display: block;
+    display: hidden; // to be switched
     float: right;
     width: 10%;
     min-width: 50px;
@@ -60,4 +60,4 @@ h1 {
   background-color: #777;
 }
 
-#output {visibility:hidden}
+// #output {visibility:hidden}
