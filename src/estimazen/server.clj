@@ -129,6 +129,11 @@
     (clojure.pprint/pprint (:any @connected-uids)))
   (reset! connected-uids {:any #{} :ws #{} :ajax #{}}))
 
+
+(defn broadcast [uids msg]
+  (doseq [uid uids]
+    (chsk-send! uid msg)))
+
 (defmethod -event-msg-handler :estimazen/est-button
   [{[evt-id {:keys [btn-value]}] :event client-id :client-id :as all}]
   (swap! estimations assoc client-id btn-value)
@@ -137,13 +142,19 @@
     (debugf "Estimation: %s from %s" btn-value client-id)
     (when (>= (count current-estimations) (count current-connected-uids))
       (debugf "All clients voted - starting broadcast of results")
-      (doseq [uid current-connected-uids]
-        (debugf "  ...sending to %s" uid)
-        (chsk-send! uid
-          [:estimazen/est-result
-           {:estimations current-estimations
-            :html (hiccup/html [:ul (for [est (sort (map second current-estimations))] [:li est])])}]))
+      (broadcast current-connected-uids [:estimazen/est-result
+                                         {:estimations current-estimations
+                                          :html (hiccup/html [:ul (for [est (sort (map second current-estimations))] [:li est])])}])
       (reset! estimations {}))))
+
+
+(comment
+  ;; experiments with close -
+  ;; BUT: connected-uids is not cleared, client do not reconnect
+  ;; -> does not work for cleaning connections
+  (defn close []
+    (broadcast (:any @connected-uids) [:chsk/close]))
+  (close))
 
 ;;;; Sente event router (our `event-msg-handler` loop)
 
