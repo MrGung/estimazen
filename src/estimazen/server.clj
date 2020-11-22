@@ -110,6 +110,14 @@
   [{:as ev-msg :keys [id ?data event]}]
   (-event-msg-handler ev-msg))                              ; Handle event-msgs on a single thread
 
+(defmethod -event-msg-handler
+  :default                                                  ; Default/fallback case (no other matching handler)
+  [{:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
+  (let [session (:session ring-req)
+        uid (:uid session)]
+    (debugf "Unhandled event: %s" event)
+    (when ?reply-fn
+      (?reply-fn {:umatched-event-as-echoed-from-server event}))))
 
 (defmethod -event-msg-handler
   :chsk/uidport-close
