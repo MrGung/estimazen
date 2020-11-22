@@ -73,31 +73,6 @@
     ring-routes ring.middleware.defaults/site-defaults))
 
 
-;;;; Some server>user async push examples
-
-(defonce broadcast-enabled?_ (atom false))
-
-(defn start-example-broadcaster!
-  "As an example of server>user async pushes, setup a loop to broadcast an
-  event to all connected users every 10 seconds"
-  []
-  (let [broadcast!
-        (fn [i]
-          (let [uids (:any @connected-uids)]
-            (debugf "Broadcasting server>user: %s uids" (count uids))
-            (doseq [uid uids]
-              (chsk-send! uid
-                [:some/broadcast
-                 {:what-is-this "An async broadcast pushed from server"
-                  :how-often "Every 10 seconds"
-                  :to-whom uid
-                  :i i}]))))]
-
-    (go-loop [i 0]
-      (<! (async/timeout 10000))
-      (when @broadcast-enabled?_ (broadcast! i))
-      (recur (inc i)))))
-
 ;;;; Sente event handlers
 
 (defmulti -event-msg-handler
@@ -200,7 +175,7 @@
     (reset! web-server_ stop-fn)))
 
 (defn stop! [] (stop-router!) (stop-web-server!))
-(defn start! [] (start-router!) (start-web-server!) (start-example-broadcaster!))
+(defn start! [] (start-router!) (start-web-server!))
 
 (defn -main "For `lein run`, etc." [] (start!))
 

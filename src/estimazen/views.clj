@@ -27,7 +27,5 @@
        [:p
          [:button {:id "est-btn-ready", :type "button"} "Bereit für nächste Schätzung"]]
        [:p
-        [:button {:id "reconnect", :type "button"} "Reconnect"]]
-       [:p
         [:textarea {:id "output", :style "width: 100%; height: 200px;"}]]
        [:script {:src "main.js"}]]]]))
