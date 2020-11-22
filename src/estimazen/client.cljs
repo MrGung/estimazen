@@ -16,9 +16,9 @@
 
 ;;;; Util for logging output to on-screen console
 
-(def output-el (.getElementById js/document "output"))
 (defn ->output! [fmt & args]
-  (let [msg (apply encore/format fmt args)]
+  (let [output-el (.getElementById js/document "output")
+        msg (apply encore/format fmt args)]
     (timbre/debug msg)
     (aset output-el "value" (str "• " (.-value output-el) "\n" msg))
     (aset output-el "scrollTop" (.-scrollHeight output-el))))
@@ -27,28 +27,28 @@
 
 ;;;; Define our Sente channel socket (chsk) client
 
-(def ?csrf-token
-  (when-let [el (.getElementById js/document "sente-csrf-token")]
-    (.getAttribute el "data-csrf-token")))
+(defn get-csrf-token []
+  (let [?csrf-token (when-let [el (.getElementById js/document "sente-csrf-token")]
+                      (.getAttribute el "data-csrf-token"))]
+    (if ?csrf-token
+      (->output! "CSRF token detected in HTML, great! %s" ?csrf-token)
+      (->output! "CSRF token NOT detected in HTML, default Sente config will reject requests"))
+    ?csrf-token))
 
 
+(defn init-channel []
+  (let [;; Serializtion format, must use same val for client + server:
+        packer :edn                                         ; Default packer, a good choice in most cases
 
-(if ?csrf-token
-  (->output! "CSRF token detected in HTML, great! %s" ?csrf-token)
-  (->output! "CSRF token NOT detected in HTML, default Sente config will reject requests"))
-
-(let [;; Serializtion format, must use same val for client + server:
-      packer :edn                                           ; Default packer, a good choice in most cases
-
-      {:keys [chsk ch-recv send-fn state]} (sente/make-channel-socket-client!
-                                             "/chsk"        ; Must match server Ring routing URL
-                                             ?csrf-token
-                                             {:type :auto
-                                              :packer packer})]
-  (def chsk chsk)
-  (def ch-chsk ch-recv)                                     ; ChannelSocket's receive channel
-  (def chsk-send! send-fn)                                  ; ChannelSocket's send API fn
-  (def chsk-state state))                                   ; Watchable, read-only atom
+        {:keys [chsk ch-recv send-fn state]} (sente/make-channel-socket-client!
+                                               "/chsk"      ; Must match server Ring routing URL
+                                               (get-csrf-token)
+                                               {:type :auto
+                                                :packer packer})]
+    (def chsk chsk)
+    (def ch-chsk ch-recv)                                   ; ChannelSocket's receive channel
+    (def chsk-send! send-fn)                                ; ChannelSocket's send API fn
+    (def chsk-state state)))                                ; Watchable, read-only atom
 
 
 ;;;; Sente event handlers
@@ -124,51 +124,66 @@
 
 ;;;; UI events
 
-(when-let [target-els (.getElementsByClassName js/document "est-btn")]
-  (doseq [target-el target-els]
-    (->output! "Registered Btn %s" (.-textContent target-el))
-    (.addEventListener target-el "click"
-      (fn [ev]
-        (->output! "est-Button was clicked: %s" (.-textContent target-el))
-        (chsk-send! [:estimazen/est-button {:btn-value (.-textContent target-el) :had-a-callback? "nope"}])))))
+(defn on-click-voting-button [target-el ev]
+  (->output! "est-Button was clicked: %s" (.-textContent target-el))
+  (chsk-send! [:estimazen/est-button {:btn-value (.-textContent target-el) :had-a-callback? "nope"}]))
+(defn on-click-login-button [ev]
+  (let [user-id (.-value (.getElementById js/document "input-login"))]
+    (if (str/blank? user-id)
+      (js/alert "Please enter a user-id first")
+      (do
+        (->output! "Logging in with user-id %s" user-id)
 
-(when-let [target-el (.getElementById js/document "btn-login")]
-  (.addEventListener target-el "click"
-    (fn [ev]
-      (let [user-id (.-value (.getElementById js/document "input-login"))]
-        (if (str/blank? user-id)
-          (js/alert "Please enter a user-id first")
-          (do
-            (->output! "Logging in with user-id %s" user-id)
+        ;;; Use any login procedure you'd like. Here we'll trigger an Ajax
+        ;;; POST request that resets our server-side session. Then we ask
+        ;;; our channel socket to reconnect, thereby picking up the new
+        ;;; session.
 
-            ;;; Use any login procedure you'd like. Here we'll trigger an Ajax
-            ;;; POST request that resets our server-side session. Then we ask
-            ;;; our channel socket to reconnect, thereby picking up the new
-            ;;; session.
+        (sente/ajax-lite "/login"
+          {:method :post
+           :headers {:X-CSRF-Token (:csrf-token @chsk-state)}
+           :params {:user-id (str user-id)}}
 
-            (sente/ajax-lite "/login"
-              {:method :post
-               :headers {:X-CSRF-Token (:csrf-token @chsk-state)}
-               :params  {:user-id (str user-id)}}
+          (fn [ajax-resp]
+            (->output! "Ajax login response: %s" ajax-resp)
+            (let [login-successful? true]                   ; Your logic here
 
-              (fn [ajax-resp]
-                (->output! "Ajax login response: %s" ajax-resp)
-                (let [login-successful? true] ; Your logic here
+              (if-not login-successful?
+                (->output! "Login failed")
+                (do
+                  (->output! "Login successful")
+                  (sente/chsk-reconnect! chsk))))))))))
+(defn on-click-reconnect-button [ev]
+  (->output! "Reconnecting")
+  (sente/chsk-reconnect! chsk))
 
-                  (if-not login-successful?
-                    (->output! "Login failed")
-                    (do
-                      (->output! "Login successful")
-                      (sente/chsk-reconnect! chsk))))))))))))
 
-(when-let [target-el (.getElementById js/document "reconnect")]
-  (.addEventListener target-el "click"
-    (fn [ev]
-      (->output! "Reconnecting")
-      (sente/chsk-reconnect! chsk))))
+;;;;; Register for UI-Events
+
+(defn register-voting-buttons []
+  (when-let [target-els (.getElementsByClassName js/document "est-btn")]
+    (doseq [target-el target-els]
+      (->output! "Registered Btn %s" (.-textContent target-el))
+      (.addEventListener target-el "click" (partial on-click-voting-button target-el)))))
+
+(defn register-login-button []
+  (when-let [target-el (.getElementById js/document "btn-login")]
+    (.addEventListener target-el "click" on-click-login-button)))
+
+(defn register-reconnect-button []
+  (when-let [target-el (.getElementById js/document "reconnect")]
+    (.addEventListener target-el "click" on-click-reconnect-button)))
+
 
 ;;;; Init stuff
 
-(defn start! [] (start-router!))
+(defn start! []
+  (start-router!)
+  (init-channel)
+  (register-voting-buttons)
+  (register-login-button)
+  (register-reconnect-button))
+
+
 
 (defonce _start-once (start!))
