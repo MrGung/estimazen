@@ -140,8 +140,9 @@
 ;;;; Init stuff
 
 (defn start! []
-  (start-router!)
+  (->output! "~~> start!ing")
   (init-channel)
+  (start-router!)
   (register-voting-buttons))
 
 
