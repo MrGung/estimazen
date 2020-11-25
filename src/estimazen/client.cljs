@@ -94,12 +94,13 @@
   (when-let [results-el (.getElementById js/document "est-results")]
     (->output! "Displaying results...")
     (-> results-el
+      (.-innerHTML)
+      (set! html))
+    (-> results-el
       (.-style)
       (.-display)
       (set! "visible"))
-    (-> results-el
-      (.-innerHTML)
-      (set! html))))
+    (->output! "  ...")))
 
 
 (comment
