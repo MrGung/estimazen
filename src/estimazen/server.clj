@@ -115,6 +115,7 @@
 
 (defn broadcast [uids msg]
   (doseq [uid uids]
+    (debugf "  broadcasting to %s" uid)
     (chsk-send! uid msg)))
 
 (defmethod -event-msg-handler :estimazen/est-button

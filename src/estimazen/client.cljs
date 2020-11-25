@@ -16,9 +16,9 @@
 
 ;;;; Util for logging output to on-screen console
 
+(def output-el (.getElementById js/document "output"))
 (defn ->output! [fmt & args]
-  (let [output-el (.getElementById js/document "output")
-        msg (apply encore/format fmt args)]
+  (let [msg (apply encore/format fmt args)]
     (timbre/debug msg)
     (aset output-el "value" (str "• " (.-value output-el) "\n" msg))
     (aset output-el "scrollTop" (.-scrollHeight output-el))))
@@ -85,6 +85,7 @@
 
 (defmethod -event-msg-handler :chsk/recv
   [{:as ev-msg :keys [?data]}]
+  (->output! ":chsk/recv recievied: %s" ?data)
   (push-msg-handler ?data))
 
 (defmethod push-msg-handler :estimazen/est-result
@@ -109,7 +110,11 @@
     (-> results-el
       (.-style)
       (.-display)
-      (set! "visible"))))
+      (set! "visible")))
+  (event-msg-handler
+    {:id :chsk/recv
+     :?data [:estimazen/est-result {:estimations [] :html "<ul></ul>"}]})
+  (do))
 
 
 ;;;; Sente event router (our `event-msg-handler` loop)
