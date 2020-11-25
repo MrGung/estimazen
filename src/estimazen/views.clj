@@ -25,7 +25,5 @@
           [:button {:id (str "est-btn" btn-id), :type "button", :class "est-btn"} btn-id])
         [:button {:id (str "est-btn-abstent"), :type "button", :class "est-btn"} "Enthaltung"]]
        [:p
-         [:button {:id "est-btn-ready", :type "button"} "Bereit für nächste Schätzung"]]
-       [:p
         [:textarea {:id "output", :style "width: 100%; height: 200px;"}]]
        [:script {:src "main.js"}]]]]))

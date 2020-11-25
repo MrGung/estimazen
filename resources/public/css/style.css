@@ -37,8 +37,6 @@ h1 {
   font-size: 1.2em;
 }
 
-#est-btn-ready {border-radius: 4px}
-
 #est-results {
     display: block;
     float: right;
@@ -55,10 +53,10 @@ h1 {
 }
 #est-results ul{padding:0;margin:0;padding-left: 1em}
 
-.est-btn, #est-btn-ready {
+.est-btn {
   transition-duration: 0.4s;
 }
-.est-btn:hover, #est-btn-ready:hover {
+.est-btn:hover {
   background-color: #777;
 }
 
