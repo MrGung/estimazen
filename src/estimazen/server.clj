@@ -124,12 +124,24 @@
   (let [current-estimations @estimations
         current-connected-uids (:any @connected-uids)]
     (debugf "Estimation: %s from %s" btn-value client-id)
+    (broadcast current-connected-uids [:estimazen/est-stats-estimated {:number-estimated (count current-estimations)}])
     (when (>= (count current-estimations) (count current-connected-uids))
-      (debugf "All clients voted - starting broadcast of results")
+       (debugf "All clients voted - starting broadcast of results")
       (broadcast current-connected-uids [:estimazen/est-result
                                          {:estimations current-estimations
                                           :html (hiccup/html [:ul (for [est (sort (map second current-estimations))] [:li est])])}])
       (reset! estimations {}))))
+
+
+
+
+(add-watch connected-uids :connected-uids
+  (fn [_ _ old-connected-uids new-connected-uids]
+    (debugf "watch was called")
+    (when (not= old-connected-uids new-connected-uids)
+      (debugf "Connected uids change: %s" new-connected-uids)
+      (broadcast (:any new-connected-uids) [:estimazen/est-stats-clients
+                                             {:number-clients (-> new-connected-uids :any count)}]))))
 
 
 (comment

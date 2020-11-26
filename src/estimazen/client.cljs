@@ -101,6 +101,20 @@
       (.-display)
       (set! "visible"))
     (->output! "  ...")))
+(defmethod push-msg-handler :estimazen/est-stats-estimated
+  [[id {:keys [number-estimated]}]]
+  (->output! "Number-Estimated recieved from server: %s" number-estimated)
+  (when-let [results-el (.getElementById js/document "est-stats-estimated")]
+    (-> results-el
+      (.-innerHTML)
+      (set! number-estimated))))
+(defmethod push-msg-handler :estimazen/est-stats-clients
+  [[id {:keys [number-clients]}]]
+  (->output! "Number-Clients recieved from server: %s" number-clients)
+  (when-let [results-el (.getElementById js/document "est-stats-clients")]
+    (-> results-el
+      (.-innerHTML)
+      (set! number-clients))))
 
 
 (comment

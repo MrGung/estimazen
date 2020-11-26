@@ -16,7 +16,9 @@
       [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]]
      [:body
       [:div {:class "bg"}
-       [:div#est-results]
+       [:div#estimations
+        [:p#est-stats "Schätzungen " [:span#est-stats-estimated "0"] "/" [:span#est-stats-clients "0"]]
+        [:div#est-results]]
        [:h1 "estimazen"]
        (let [csrf-token #_(:anti-forgery-token ring-req) (force anti-forgery/*anti-forgery-token*)]
          [:div#sente-csrf-token {:data-csrf-token csrf-token}])
