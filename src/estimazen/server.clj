@@ -118,6 +118,14 @@
     (debugf "  broadcasting to %s" uid)
     (chsk-send! uid msg)))
 
+(defn estimation-to-int [est]
+  (try
+    (Integer/parseInt est)
+    (catch Exception e
+      ;; Some "max" value
+      1000)))
+
+
 (defmethod -event-msg-handler :estimazen/est-button
   [{[evt-id {:keys [btn-value]}] :event client-id :client-id :as all}]
   (swap! estimations assoc client-id btn-value)
@@ -129,7 +137,7 @@
        (debugf "All clients voted - starting broadcast of results")
       (broadcast current-connected-uids [:estimazen/est-result
                                          {:estimations current-estimations
-                                          :html (hiccup/html [:ul (for [est (sort (map second current-estimations))] [:li est])])}])
+                                          :html (hiccup/html [:ul (for [est (sort-by estimation-to-int (map second current-estimations))] [:li est])])}])
       (reset! estimations {}))))
 
 
