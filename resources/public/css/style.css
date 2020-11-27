@@ -37,6 +37,9 @@ h1 {
   padding:10px 15px;
   font-size: 1.2em;
 }
+.est-btn.active-btn {
+    background-color: #ffff;
+}
 
 
 #estimations {

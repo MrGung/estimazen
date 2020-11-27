@@ -97,10 +97,11 @@
       (.-innerHTML)
       (set! html))
     (->output! "  ...")))
-
+(declare remove-active-button!)
 (defmethod push-msg-handler :estimazen/clear-result
   [_]
   (->output! "Clearing result of previous estimation")
+  (remove-active-button!)
   (when-let [results-el (.getElementById js/document "est-results")]
     (-> results-el
       (.-innerHTML)
@@ -150,8 +151,25 @@
 
 ;;;; UI events
 
+(defn get-classes [el]
+  (-> el (.getAttribute "class") (str/split " ")))
+(defn set-classes! [el classes]
+  (-> el (.setAttribute "class" (str/join " " classes))))
+
+(defonce active-btn-class "active-btn")
+(defn remove-active-button! []
+  (when-let [target-els (.getElementsByClassName js/document active-btn-class)]
+    (doseq [target-el target-els]
+      (set-classes! target-el (->> target-el get-classes (remove #{active-btn-class}))))))
+(defn mark-button-active [button-el]
+  (remove-active-button!)
+  (->output! "Marking active button: %s" (.-textContent button-el))
+  (set-classes! button-el (-> button-el get-classes (conj active-btn-class))))
+
+
 (defn on-click-voting-button [target-el ev]
   (->output! "est-Button was clicked: %s" (.-textContent target-el))
+  (mark-button-active target-el)
   (chsk-send! [:estimazen/est-button {:btn-value (.-textContent target-el) :had-a-callback? "nope"}]))
 
 ;;;;; Register for UI-Events

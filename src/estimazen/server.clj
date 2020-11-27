@@ -115,7 +115,7 @@
 
 (defn broadcast [uids msg]
   (doseq [uid uids]
-    (debugf "  broadcasting to %s" uid)
+    (debugf "  broadcasting to %s: %s" uid msg)
     (chsk-send! uid msg)))
 
 (defn estimation-to-int [est]
@@ -133,14 +133,19 @@
         current-connected-uids (:any @connected-uids)]
     (debugf "Estimation: %s from %s" btn-value client-id)
     (broadcast current-connected-uids [:estimazen/est-stats-estimated {:number-estimated (count current-estimations)}])
-    (if (>= (count current-estimations) (count current-connected-uids))
+    (cond
+      (>= (count current-estimations) (count current-connected-uids))
       (do
         (debugf "All clients voted - starting broadcast of results")
         (broadcast current-connected-uids [:estimazen/est-result
                                            {:estimations current-estimations
                                             :html (hiccup/html [:ul (for [est (sort-by estimation-to-int (map second current-estimations))] [:li est])])}])
         (reset! estimations {}))
-      (broadcast current-connected-uids [:estimazen/clear-result]))))
+
+      (<= 1 (count current-estimations))
+      ;; the other clients - not the current one - now should reset their active-button.
+      ;; since the current client was the initiator of the next round - don't reset its active button...
+      (broadcast (remove #{client-id} current-connected-uids) [:estimazen/clear-result]))))
 
 
 
