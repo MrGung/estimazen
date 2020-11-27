@@ -96,11 +96,16 @@
     (-> results-el
       (.-innerHTML)
       (set! html))
-    (-> results-el
-      (.-style)
-      (.-display)
-      (set! "visible"))
     (->output! "  ...")))
+
+(defmethod push-msg-handler :estimazen/clear-result
+  [_]
+  (->output! "Clearing result of previous estimation")
+  (when-let [results-el (.getElementById js/document "est-results")]
+    (-> results-el
+      (.-innerHTML)
+      (set! ""))))
+
 (defmethod push-msg-handler :estimazen/est-stats-estimated
   [[id {:keys [number-estimated]}]]
   (->output! "Number-Estimated recieved from server: %s" number-estimated)
@@ -108,6 +113,7 @@
     (-> results-el
       (.-innerHTML)
       (set! number-estimated))))
+
 (defmethod push-msg-handler :estimazen/est-stats-clients
   [[id {:keys [number-clients]}]]
   (->output! "Number-Clients recieved from server: %s" number-clients)
