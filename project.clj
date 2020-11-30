@@ -40,6 +40,7 @@
               [{:id :cljs-client
                 :source-paths ["src"]
                 :figwheel true
+                :jar true
                 :compiler {:main estimazen.client
                            :asset-path "js/out"             ;https://clojurescript.org/reference/compiler-options#asset-path
                            :output-to "resources/public/main.js"
@@ -49,6 +50,9 @@
                            #_#_:source-map true
                            :pretty-print true}}]}
   :main estimazen.server
+
+  :hooks [leiningen.cljsbuild]
+  :profiles {:uberjar {:aot :all}}
 
   ;; files removed by `lein clean`
   :clean-targets ^{:protect false} ["resources/public/main.js" "target" "resources/public/js/out"]

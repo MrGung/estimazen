@@ -12,7 +12,8 @@
     [org.httpkit.server :as http-kit]
     [taoensso.sente.server-adapters.http-kit :refer (get-sch-adapter)]
     [estimazen.views :as views]
-    [hiccup.core :as hiccup]))
+    [hiccup.core :as hiccup])
+  (:gen-class))
 
 
 ;; (timbre/set-level! :trace) ; Uncomment for more logging
