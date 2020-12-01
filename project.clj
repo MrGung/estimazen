@@ -33,31 +33,30 @@
   :main estimazen.server
 
   :cljsbuild {:builds
-              [{:source-paths ["src"]}]
-              :compiler {
-                         :main estimazen.client
-                         :asset-path "js/out"               ;https://clojurescript.org/reference/compiler-options#asset-path
-                         :output-to "resources/public/main.js"
-                         :output-dir "resources/public/js/out"
-                         :optimizations :advanced}}
+              {:main {:source-paths ["src"]
+                      :compiler {
+                                 :main estimazen.client
+                                 :asset-path "js/out"       ;https://clojurescript.org/reference/compiler-options#asset-path
+                                 :output-to "resources/public/main.js"
+                                 :output-dir "resources/public/js/out"
+                                 :optimizations :advanced}}}}
 
   :profiles {:dev {:plugins [[lein-pprint "1.3.2"]          ;; pprinting project map
                              [lein-ancient "0.6.15"]        ;; A Leiningen plugin to check your project for outdated dependencies and plugins.
                              [lein-figwheel "0.5.20"]]
                    :figwheel {:css-dirs ["resources/public/css"]}
                    :cljsbuild {:builds
-                               [{
-                                 :figwheel true
-                                 :jar true
-                                 :compiler {:optimizations :none ;:whitespace #_:advanced
-                                            :source-map-timestamp true
-                                            :source-map true
-                                            :pretty-print true}}]}}
-             :uberjar {:hooks [leiningen.cljsbuild]
-                       :aot :all
+                               {:main {:figwheel true
+                                       :jar true
+                                       :compiler {:optimizations :none ;:whitespace #_:advanced
+                                                  :source-map-timestamp true
+                                                  :source-map true
+                                                  :pretty-print true}}}}}
+             :uberjar {:aot :all
+                       :prep-tasks ["compile" ["cljsbuild" "once"]]
                        :cljsbuild {:builds
-                                   [{:jar true
-                                     :compiler {:optimizations :advanced}}]}}}
+                                   {:main {:jar true
+                                           :compiler {:optimizations :advanced}}}}}}
 
   ;; files removed by `lein clean`
   :clean-targets ^{:protect false} ["resources/public/main.js" "target" "resources/public/js/out"]
