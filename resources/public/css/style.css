@@ -45,7 +45,7 @@ h1 {
 #estimations {
     display: block;
     //float: right;
-    width: 80%;
+    width: 25%;
     min-width: 150px;
     border: 1px solid black;
     padding: 1em;
