@@ -182,11 +182,9 @@
 
 (defonce web-server_ (atom nil))                            ; (fn stop [])
 (defn stop-web-server! [] (when-let [stop-fn @web-server_] (stop-fn)))
-(defn start-web-server! [& [port]]
+(defn start-web-server! [{:keys [port] :or {port 0}}]     ; port 0 => Choose any available port
   (stop-web-server!)
-  (let [port (or port 0)                                    ; 0 => Choose any available port
-        ring-handler (var main-ring-handler)
-
+  (let [ring-handler (var main-ring-handler)
         [port stop-fn] (let [stop-fn (http-kit/run-server ring-handler {:port port})]
                          [(:local-port (meta stop-fn)) (fn [] (stop-fn :timeout 100))])
 
@@ -194,7 +192,6 @@
 
     (infof "Web server is running at `%s`" uri)
     (try
-
       (let [runtime (Runtime/getRuntime)
             url (java.net.URI. uri)]
         ;(.browse (java.awt.Desktop/getDesktop) url)
@@ -204,9 +201,12 @@
     (reset! web-server_ stop-fn)))
 
 (defn stop! [] (stop-router!) (stop-web-server!))
-(defn start! [] (start-router!) (start-web-server!))
+(defn start! [port] (start-router!) (start-web-server! port))
 
-(defn -main "For `lein run`, etc." [] (start!))
+(defn -main "For `lein run`, etc."
+  [& args]
+  (start! {:port (or (some-> (first args) (Integer/parseInt))
+                   0)}))
 
 (comment
   (start!)
