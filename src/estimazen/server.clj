@@ -191,13 +191,15 @@
         uri (format "http://localhost:%s/" port)]
 
     (infof "Web server is running at `%s`" uri)
-    (try
-      (let [runtime (Runtime/getRuntime)
-            url (java.net.URI. uri)]
-        ;(.browse (java.awt.Desktop/getDesktop) url)
-        (.exec runtime (format "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe %s" uri))
-        (.exec runtime (format "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe %s" uri)))
-      (catch java.awt.HeadlessException _))
+    ;; startup some browsers - but only during development - on my machine.
+    (if (= (System/getenv "COMPUTERNAME") "USER-PC")
+      (try
+        (let [runtime (Runtime/getRuntime)
+              url (java.net.URI. uri)]
+          ;(.browse (java.awt.Desktop/getDesktop) url)
+          (.exec runtime (format "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe %s" uri))
+          (.exec runtime (format "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe %s" uri)))
+        (catch java.awt.HeadlessException _)))
     (reset! web-server_ stop-fn)))
 
 (defn stop! [] (stop-router!) (stop-web-server!))
