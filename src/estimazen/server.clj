@@ -132,6 +132,7 @@
   (swap! estimations assoc client-id btn-value)
   (let [current-estimations @estimations
         current-connected-uids (:any @connected-uids)]
+
     (debugf "Estimation: %s from %s" btn-value client-id)
     (broadcast current-connected-uids [:estimazen/est-stats-estimated {:number-estimated (count current-estimations)}])
     (cond
@@ -146,7 +147,8 @@
       (<= 1 (count current-estimations))
       ;; the other clients - not the current one - now should reset their active-button.
       ;; since the current client was the initiator of the next round - don't reset its active button...
-      (broadcast (remove #{client-id} current-connected-uids) [:estimazen/clear-result]))))
+      (do (broadcast (remove #{client-id} current-connected-uids) [:estimazen/clear-active-button])
+          (broadcast current-connected-uids [:estimazen/clear-result])))))
 
 
 
@@ -211,5 +213,5 @@
                    0)}))
 
 (comment
-  (start!)
+  (start! 56666)
   (test-fast-server>user-pushes))

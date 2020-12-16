@@ -97,15 +97,20 @@
       (.-innerHTML)
       (set! html))
     (->output! "  ...")))
-(declare remove-active-button!)
+
 (defmethod push-msg-handler :estimazen/clear-result
   [_]
   (->output! "Clearing result of previous estimation")
-  (remove-active-button!)
   (when-let [results-el (.getElementById js/document "est-results")]
     (-> results-el
       (.-innerHTML)
       (set! ""))))
+
+(declare remove-active-button!)
+(defmethod push-msg-handler :estimazen/clear-active-button
+  [_]
+  (->output! "Clearing active button")
+  (remove-active-button!))
 
 (defmethod push-msg-handler :estimazen/est-stats-estimated
   [[id {:keys [number-estimated]}]]
