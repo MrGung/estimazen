@@ -131,7 +131,9 @@
   [{[evt-id {:keys [btn-value]}] :event client-id :client-id :as all}]
   (swap! estimations assoc client-id btn-value)
   (let [current-estimations @estimations
-        current-connected-uids (:any @connected-uids)]
+        current-connected-uids (:any @connected-uids)
+        ;; the number of estimations in the next round before the results of the previous round gets cleared.
+        clearing-threshold-of-estimations (Math/ceil (/ (count current-connected-uids) 3))]
 
     (debugf "Estimation: %s from %s" btn-value client-id)
     (broadcast current-connected-uids [:estimazen/est-stats-estimated {:number-estimated (count current-estimations)}])
@@ -144,7 +146,7 @@
                                             :html (hiccup/html [:ul (for [est (sort-by estimation-to-int (map second current-estimations))] [:li est])])}])
         (reset! estimations {}))
 
-      (<= 1 (count current-estimations))
+      (> (count current-estimations) clearing-threshold-of-estimations)
       ;; the other clients - not the current one - now should reset their active-button.
       ;; since the current client was the initiator of the next round - don't reset its active button...
       (do (broadcast (remove #{client-id} current-connected-uids) [:estimazen/clear-active-button])
