@@ -88,6 +88,8 @@
   (->output! ":chsk/recv recievied: %s" ?data)
   (push-msg-handler ?data))
 
+(declare remove-marks-from-buttons!)
+(declare mark-active-button-sealed!)
 (defmethod push-msg-handler :estimazen/est-result
   [[id {:keys [estimations html]}]]
   (->output! "Estimations recieved from server: %s" estimations)
@@ -96,7 +98,8 @@
     (-> results-el
       (.-innerHTML)
       (set! html))
-    (->output! "  ...")))
+    (->output! "  ..."))
+  (mark-active-button-sealed!))
 
 (defmethod push-msg-handler :estimazen/clear-result
   [_]
@@ -106,11 +109,10 @@
       (.-innerHTML)
       (set! ""))))
 
-(declare remove-active-button!)
 (defmethod push-msg-handler :estimazen/clear-active-button
   [_]
   (->output! "Clearing active button")
-  (remove-active-button!))
+  (remove-marks-from-buttons!))
 
 (defmethod push-msg-handler :estimazen/est-stats-estimated
   [[id {:keys [number-estimated]}]]
@@ -162,14 +164,21 @@
   (-> el (.setAttribute "class" (str/join " " classes))))
 
 (defonce active-btn-class "active-btn")
-(defn remove-active-button! []
-  (when-let [target-els (.getElementsByClassName js/document active-btn-class)]
-    (doseq [target-el target-els]
-      (set-classes! target-el (->> target-el get-classes (remove #{active-btn-class}))))))
+(defonce sealed-btn-class "sealed-btn")
+(defn remove-marks-from-buttons! []
+  (let [remove-class (fn [class]
+                       (when-let [target-els (.getElementsByClassName js/document class)]
+                         (doseq [target-el target-els]
+                           (set-classes! target-el (->> target-el get-classes (remove #{class}))))))]
+    (run! remove-class [active-btn-class sealed-btn-class])))
 (defn mark-button-active [button-el]
-  (remove-active-button!)
+  (remove-marks-from-buttons!)
   (->output! "Marking active button: %s" (.-textContent button-el))
   (set-classes! button-el (-> button-el get-classes (conj active-btn-class))))
+(defn mark-active-button-sealed! []
+  (doseq [button-el (.getElementsByClassName js/document active-btn-class)]
+    (->output! "Marking active button sealed: %s" (.-textContent button-el))
+    (set-classes! button-el (-> button-el get-classes (->> (remove #{active-btn-class})) (conj sealed-btn-class)))))
 
 
 (defn on-click-voting-button [target-el ev]

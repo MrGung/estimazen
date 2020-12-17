@@ -40,6 +40,9 @@ h1 {
 .est-btn.active-btn {
     background-color: #ffff;
 }
+.est-btn.sealed-btn {
+    background-color: #666f;
+}
 
 
 #estimations {
