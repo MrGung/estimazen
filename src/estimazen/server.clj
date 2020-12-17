@@ -133,7 +133,8 @@
   (let [current-estimations @estimations
         current-connected-uids (:any @connected-uids)
         ;; the number of estimations in the next round before the results of the previous round gets cleared.
-        clearing-threshold-of-estimations (Math/ceil (/ (count current-connected-uids) 3))]
+        clearing-threshold-of-estimations (Math/ceil (/ (count current-connected-uids) 3))
+        clients-having-not-yet-voted (remove (set (keys current-estimations)) current-connected-uids)]
 
     (debugf "Estimation: %s from %s" btn-value client-id)
     (broadcast current-connected-uids [:estimazen/est-stats-estimated {:number-estimated (count current-estimations)}])
@@ -149,7 +150,7 @@
       (> (count current-estimations) clearing-threshold-of-estimations)
       ;; the other clients - not the current one - now should reset their active-button.
       ;; since the current client was the initiator of the next round - don't reset its active button...
-      (do (broadcast (remove #{client-id} current-connected-uids) [:estimazen/clear-active-button])
+      (do (broadcast clients-having-not-yet-voted [:estimazen/clear-active-button])
           (broadcast current-connected-uids [:estimazen/clear-result])))))
 
 
