@@ -216,5 +216,5 @@
                    0)}))
 
 (comment
-  (start! 56666)
+  (start! {:port 56666})
   (test-fast-server>user-pushes))
