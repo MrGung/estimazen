@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="56b68448-012c-48e8-b6e9-b6ba221c2c82" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/estimazen.iml" beforeDir="false" afterPath="$PROJECT_DIR$/estimazen.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/resources/public/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimazen/client.cljs" beforeDir="false" afterPath="$PROJECT_DIR$/src/estimazen/client.cljs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimazen/server.clj" beforeDir="false" afterPath="$PROJECT_DIR$/src/estimazen/server.clj" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Clojure Namespace" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1kHttBS6HTTbeVkpE5OmjhRLVgg" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="cursive.last.file.extension.J\:/hacking/clojure/scripts/estimazen/src" value="clj" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="J:\hacking\clojure\scripts\estimazen\src\estimazen" />
+    </key>
+  </component>
+  <component name="ReplState" timestamp="1608102385377">{:repl-history {:ide [], :local [], :remote [{:command &quot;@connected-uids&quot;, :offset 15, :ns &quot;estimazen.server&quot;}]}}</component>
+  <component name="RunManager">
+    <configuration default="true" type="ClojureREPL" factoryName="Local" activateToolWindowBeforeRun="false">
+      <setting name="replType" value="NREPL" />
+      <setting name="execution" value="LEININGEN" />
+      <setting name="jvmArgs" value="" />
+      <setting name="parameters" value="" />
+      <setting name="workingDir" value="" />
+      <setting name="profiles" value="" />
+      <setting name="aliases" value="" />
+      <setting name="fixLineNumbers" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="ClojureREPL" factoryName="Remote" activateToolWindowBeforeRun="false">
+      <setting name="host" value="" />
+      <setting name="port" value="0" />
+      <setting name="replType" value="SOCKET" />
+      <setting name="configType" value="SPECIFY" />
+      <setting name="replPortFileType" value="STANDARD" />
+      <setting name="customPortFile" value="" />
+      <setting name="fixLineNumbers" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="nREPL" type="ClojureREPL" factoryName="Remote" activateToolWindowBeforeRun="false">
+      <module name="estimazen" />
+      <setting name="host" value="" />
+      <setting name="port" value="0" />
+      <setting name="replType" value="NREPL" />
+      <setting name="configType" value="PORT_FILE" />
+      <setting name="replPortFileType" value="SPECIFY" />
+      <setting name="customPortFile" value=".nrepl-port" />
+      <setting name="fixLineNumbers" value="false" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="56b68448-012c-48e8-b6e9-b6ba221c2c82" name="Default Changelist" comment="" />
+      <created>1605369558366</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1605369558366</updated>
+    </task>
+    <servers />
+  </component>
+</project>
