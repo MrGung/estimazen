@@ -57,7 +57,7 @@ h1 {
     border-radius: 4px;
     background-color: #fffb;
     //height: 60px;
-    margin-top:10%;
+    margin-top:6%;
     font-weight: bold;
 }
 
@@ -69,6 +69,7 @@ h1 {
 #est-results{
     font-weight: lighter;
     margin-top: 0;
+    margin-bottom: 1em;
     padding-top: 0;}
 #est-results ul{
     list-style: none;
@@ -92,16 +93,50 @@ h1 {
 
 
 /* parent-selector */
-div < ul#hinweise {
+div#hinweise {
     float:right;
-    width: 40em;
+    position:absolute; /* damit's zum Hintergrundbild passt*/
+    top: 255px;
+    left: 750px;
+    width: 38em;
+    /*right:20px;
+    width: 35em;*/
     max-width: 50%;
-}
-ul#hinweise {
     background-color: #fffb;
     border-radius: 4px;
     border: 1px solid black;
+}
+div#hinweise h2{
+margin-left:1em;
+margin-bottom:-0.5em;
+    font-family: "Segoe Script", sans-serif;
+}
+div#hinweise ul {
+    margin-left: 1em;
     padding: 1em 2em;
     font-family: "Segoe UI", sans-serif;
 }
-ul#hinweise li{margin-bottom:0.5em}
+div#hinweise ul li{margin-bottom:0.5em}
+#hinweise ul li em {font-weight: bold;}
+/*#hinweise dt:after {content: "=>"}*/
+#hinweise dl{
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  width: 100%;
+  overflow: visible;
+}
+#hinweise dt {
+  flex: 0 0 35%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#hinweise dd {
+  flex: 0 0 65%;
+  margin-left: auto;
+  text-align: left;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-bottom:0.5em;
+}
+
