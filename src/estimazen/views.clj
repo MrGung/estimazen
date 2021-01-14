@@ -7,16 +7,17 @@
 
 (defn hinweise-zur-verwendung []
   [:ul
-   [:li "Funktioniert nur in der " [:em "VDI"] "."]
-   [:li "Funktioniert nur zuverlässig im (neuen) " [:em "Edge"] " (der mit der Welle) und " [:em "Chrome"] "."]
-   [:li [:em "URL ändert sich"] " bei jedem Mal (zumindest ist davon auszugehen). Bookmarken daher sinnlos."]
-   [:li "Solange die Schätzungen in der List noch nicht angezeigt werden, kann man seine " [:em "Schätzung durch Klick auf einen anderen Wert ändern"] ". Auch Enthaltung ist möglich."]
-   [:li "Die " [:em "Buttonfarbe"] " hat folgende Bedeutung:"
+   [:li "Funktioniert nur in der <em>VDI</em>."]
+   [:li "Funktioniert nur zuverlässig im (neuen) <em>Edge</em> (der mit der Welle) und <em>Chrome</em>."]
+   [:li "<em>URL ändert sich</em> bei jedem Mal (zumindest ist davon auszugehen). Bookmarken daher sinnlos."]
+   [:li "Solange die Schätzungen in der List noch nicht angezeigt werden, kann man seine <em>Schätzung durch Klick auf einen anderen Wert ändern</em>. Auch Enthaltung ist möglich."]
+   [:li "Die <em>Buttonfarbe</em> hat folgende Bedeutung:"
     [:dl
-     [:dt "Durchscheinendes Weiß"] [:dd "noch keine eigene Schätzung abgegeben."]
-     [:dt "Deckendes Weiß"] [:dd "die aktuell aktive eigene Schätzung."]
-     [:dt "Dunkelgrau"] [:dd "Ergebnisse wurden angezeigt, die Schätzung wurde berücksichtigt."]]]
-   [:li "Wenn ein Drittel der Schätzer einen Wert abgegeben hat, wird die " [:em "Ergebnisliste geleert"] ", um so die nächste Runde zu signalisieren."]])
+     [:dt "Durchscheinend"] [:dd "nicht aktiv"]
+     [:dt "Weiß"] [:dd "die aktuell aktive eigene Schätzung."]
+     [:dt "Schwarz"] [:dd "Ergebnisse wurden angezeigt, die Schätzung wurde berücksichtigt."]]]
+   [:li "Wenn alle Buttons <em>durscheinend</em> sind, wurde in der aktuellen Runde noch nicht geschätzt."]
+   [:li "Wenn ein Drittel der Schätzer einen Wert abgegeben hat, wird die <em>Ergebnisliste geleert</em>, um so die nächste Runde zu signalisieren."]])
 
 
 
