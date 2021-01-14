@@ -101,13 +101,15 @@
     (->output! "  ..."))
   (mark-active-button-sealed!))
 
-(defmethod push-msg-handler :estimazen/clear-result
-  [_]
+(defn clear-results []
   (->output! "Clearing result of previous estimation")
   (when-let [results-el (.getElementById js/document "est-results")]
     (-> results-el
       (.-innerHTML)
       (set! ""))))
+(defmethod push-msg-handler :estimazen/clear-result
+  [_] (clear-results))
+
 
 (defmethod push-msg-handler :estimazen/clear-active-button
   [_]
@@ -184,6 +186,7 @@
 (defn on-click-voting-button [target-el ev]
   (->output! "est-Button was clicked: %s" (.-textContent target-el))
   (mark-button-active target-el)
+  (clear-results)
   (chsk-send! [:estimazen/est-button {:btn-value (.-textContent target-el) :had-a-callback? "nope"}]))
 
 ;;;;; Register for UI-Events
