@@ -1,4 +1,4 @@
-(defproject estimazen "0.4.0"
+(defproject estimazen "0.4.1"
   :description "minimalist agile distributed estimation tool"
   :url "https://github.com/MrGung/estimazen"
   :license {:name "The Unlicense"

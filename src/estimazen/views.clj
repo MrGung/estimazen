@@ -16,7 +16,7 @@
      [:dt "Durchscheinend"] [:dd "nicht aktiv"]
      [:dt "Weiß"] [:dd "die aktuell aktive eigene Schätzung."]
      [:dt "Schwarz"] [:dd "Ergebnisse wurden angezeigt, die Schätzung wurde berücksichtigt."]]]
-   [:li "Wenn alle Buttons <em>durscheinend</em> sind, wurde in der aktuellen Runde noch nicht geschätzt."]
+   [:li "Wenn alle Buttons <em>durchscheinend</em> sind, wurde in der aktuellen Runde noch nicht geschätzt."]
    [:li "Wenn ein Drittel der Schätzer einen Wert abgegeben hat, wird die <em>Ergebnisliste geleert</em>, um so die nächste Runde zu signalisieren."]])
 
 
